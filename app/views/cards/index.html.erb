@@ -1,0 +1,33 @@
+<p style="color: green"><%= notice %></p>
+<% content_for :title, "Cards" %>
+
+<h1 class="mx-auto text-2xl font-bold mb-6 text-center">Your Cards</h1>
+<!--<div
+  data-controller="select-card"
+  class="
+    grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8
+    gap-4
+  "
+>
+  -->
+  <div data-controller="select-card" class="mb-6">
+    <div class="text-center mb-6">
+      <input
+        type="text"
+        placeholder="Search cards..."
+        data-action="input->select-card#filter"
+        data-select-card-target="search"
+        class="
+          w-full max-w-md border border-gray-300 rounded px-4 py-2 shadow-sm
+        "
+      />
+    </div>
+    <div
+      class="
+        grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8
+        gap-4
+      "
+      data-select-card-target="grid"
+    >
+      <%= render @cards %>
+    </div>

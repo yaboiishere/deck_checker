@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  set_code: MyString
+  set_name: MyString
+  coolector_number: MyString
+  foil: false
+  rarity: MyString
+  quantity: 1
+  scryfall_id: MyString
+  price: 1.5
+  misprint: false
+  altered: false
+  condition: MyString
+  language: MyString
+  currency: MyString
+
+two:
+  name: MyString
+  set_code: MyString
+  set_name: MyString
+  coolector_number: MyString
+  foil: false
+  rarity: MyString
+  quantity: 1
+  scryfall_id: MyString
+  price: 1.5
+  misprint: false
+  altered: false
+  condition: MyString
+  language: MyString
+  currency: MyString

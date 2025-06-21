@@ -1,0 +1,87 @@
+<%= form_with(model: card) do |form| %>
+  <% if card.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(card.errors.count, "error") %> prohibited this card from being saved:</h2>
+
+      <ul>
+        <% card.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :set_code, style: "display: block" %>
+    <%= form.text_field :set_code %>
+  </div>
+
+  <div>
+    <%= form.label :set_name, style: "display: block" %>
+    <%= form.text_field :set_name %>
+  </div>
+
+  <div>
+    <%= form.label :coolector_number, style: "display: block" %>
+    <%= form.text_field :coolector_number %>
+  </div>
+
+  <div>
+    <%= form.label :foil, style: "display: block" %>
+    <%= form.checkbox :foil %>
+  </div>
+
+  <div>
+    <%= form.label :rarity, style: "display: block" %>
+    <%= form.text_field :rarity %>
+  </div>
+
+  <div>
+    <%= form.label :quantity, style: "display: block" %>
+    <%= form.number_field :quantity %>
+  </div>
+
+  <div>
+    <%= form.label :scryfall_id, style: "display: block" %>
+    <%= form.text_field :scryfall_id %>
+  </div>
+
+  <div>
+    <%= form.label :price, style: "display: block" %>
+    <%= form.text_field :price %>
+  </div>
+
+  <div>
+    <%= form.label :misprint, style: "display: block" %>
+    <%= form.checkbox :misprint %>
+  </div>
+
+  <div>
+    <%= form.label :altered, style: "display: block" %>
+    <%= form.checkbox :altered %>
+  </div>
+
+  <div>
+    <%= form.label :condition, style: "display: block" %>
+    <%= form.text_field :condition %>
+  </div>
+
+  <div>
+    <%= form.label :language, style: "display: block" %>
+    <%= form.text_field :language %>
+  </div>
+
+  <div>
+    <%= form.label :currency, style: "display: block" %>
+    <%= form.text_field :currency %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
