@@ -1,4 +1,6 @@
 class Card < ApplicationRecord
+  self.per_page = 96
+
   belongs_to :language
   belongs_to :currency
   belongs_to :mtg_set

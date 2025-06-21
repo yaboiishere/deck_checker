@@ -3,7 +3,12 @@ class CardsController < ApplicationController
 
   # GET /cards or /cards.json
   def index
-    @cards = Card.includes([ :language, :currency, :mtg_set ]).all
+    @cards = Card.includes([ :language, :currency, :mtg_set ]).order(:name)
+    if params[:q].present?
+      @cards = @cards.where("name ILIKE ?", "%#{params[:q]}%")
+    end
+
+    @cards = @cards.page(params[:page])
   end
 
   # GET /cards/1 or /cards/1.json

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["card", "grid", "search"]
+  static targets = ["card"]
 
   connect() {
     this.selectedCard = null
@@ -19,19 +19,20 @@ export default class extends Controller {
   }
 
   deselect(_event) {
+    if (!this.selectedCard) return
     this.selectedCard.classList.remove("scale-125")
     this.selectedCard = null
   }
 
-  filter() {
-    const term = this.searchTarget.value.trim().toLowerCase()
-    const cards = this.gridTarget.children
-
-    for (const card of cards) {
-      const text = card.dataset.searchText || ""
-      const match = text.toLowerCase().includes(term)
-      card.style.display = match ? "" : "none"
-    }
-  }
+  // filter() {
+  //   const term = this.searchTarget.value.trim().toLowerCase()
+  //   const cards = this.gridTarget.children
+  //
+  //   for (const card of cards) {
+  //     const text = card.dataset.searchText || ""
+  //     const match = text.toLowerCase().includes(term)
+  //     card.style.display = match ? "" : "none"
+  //   }
+  // }
 }
 

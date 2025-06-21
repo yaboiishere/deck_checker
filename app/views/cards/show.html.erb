@@ -1,10 +1,68 @@
-<p style="color: green"><%= notice %></p>
+<%= link_to "← Back to all cards",
+cards_path,
+class: "text-blue-600 dark:text-blue-400 hover:underline block mb-6 h-full" %>
 
-<%= render @card %>
+<div
+  class="
+    max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-6
+    transition-colors duration-300
+  "
+>
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Card image -->
+    <div
+      class="
+        flex-shrink-0 w-full md:w-1/3 bg-gray-100 dark:bg-gray-700 rounded min-w-48
+        overflow-hidden aspect-[3/4] min-w-80
+      "
+    >
+      <img
+        src="https://cards.scryfall.io/normal/front/<%= @card.scryfall_id[0] %>/<%= @card.scryfall_id[1] %>/<%= @card.scryfall_id %>.jpg"
+        alt="<%= @card.name %>"
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <!-- Card details -->
+    <div
+      class="
+        flex-1 space-y-3 text-sm text-gray-800 dark:text-gray-200 justify-items-start
+      "
+    >
+      <h1 class="text-center text-2xl font-bold mb-3"><%= @card.name %></h1>
 
-<div>
-  <%= link_to "Edit this card", edit_card_path(@card) %> |
-  <%= link_to "Back to cards", cards_path %>
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Set:</span>
+        <%= @card.mtg_set.name %>
+        (<%= @card.mtg_set.code %>)</p>
 
-  <%= button_to "Destroy this card", @card, method: :delete %>
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Collector #:</span>
+        <%= @card.collector_number %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Foil:</span>
+        <%= @card.foil ? "Yes" : "No" %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Rarity:</span>
+        <%= @card.rarity %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Quantity:</span>
+        <%= @card.quantity %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Condition:</span>
+        <%= @card.condition %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Language:</span>
+        <%= @card.language.name %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Price:</span>
+        <%= number_to_currency(@card.price, unit: @card.currency.symbol) %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Misprint:</span>
+        <%= @card.misprint ? "Yes" : "No" %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Altered:</span>
+        <%= @card.altered ? "Yes" : "No" %></p>
+
+      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Scryfall ID:</span>
+        <%= @card.scryfall_id %></p>
+    </div>
+  </div>
 </div>
