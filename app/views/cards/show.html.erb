@@ -1,7 +1,3 @@
-<%= link_to "← Back to all cards",
-cards_path,
-class: "text-blue-600 dark:text-blue-400 hover:underline block mb-6 h-full" %>
-
 <div
   class="
     max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-6
@@ -43,9 +39,6 @@ class: "text-blue-600 dark:text-blue-400 hover:underline block mb-6 h-full" %>
       <p><span class="font-semibold text-gray-600 dark:text-gray-400">Rarity:</span>
         <%= @card.rarity %></p>
 
-      <p><span class="font-semibold text-gray-600 dark:text-gray-400">Quantity:</span>
-        <%= @card.quantity %></p>
-
       <p><span class="font-semibold text-gray-600 dark:text-gray-400">Condition:</span>
         <%= @card.condition %></p>
 
@@ -63,6 +56,10 @@ class: "text-blue-600 dark:text-blue-400 hover:underline block mb-6 h-full" %>
 
       <p><span class="font-semibold text-gray-600 dark:text-gray-400">Scryfall ID:</span>
         <%= @card.scryfall_id %></p>
+
+      <%= link_to "← Back to all cards",
+      cards_path,
+      class: "text-blue-600 dark:text-blue-400 hover:underline block mb-6 h-full" %>
     </div>
   </div>
 </div>

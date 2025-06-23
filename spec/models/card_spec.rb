@@ -9,7 +9,6 @@ RSpec.describe Card, type: :model do
       altered: false,
       misprint: false,
       condition: "near_mint",
-      quantity: 1,
       price: 1.25,
       scryfall_id: "abc123",
       rarity: "common",

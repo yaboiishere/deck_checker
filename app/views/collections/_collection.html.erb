@@ -1,0 +1,40 @@
+<% card = collection.card %>
+<%= link_to collection_path(card), class: "block" do %>
+  <div
+    id="<%= dom_id card %>"
+    data-action="
+      mouseover->select-card#select
+      mouseleave->select-card#deselect
+    "
+    data-search-text="<%= "#{card.name} #{card.mtg_set.code} #{card.collector_number}" %>"
+    class="
+      bg-white dark:bg-gray-800 rounded shadow transition-transform duration-300
+      ease-in-out p-2 flex flex-col items-center hover:shadow-lg cursor-pointer
+    "
+  >
+    <div
+      class="
+        w-full aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded overflow-hidden
+      "
+    >
+      <img
+        src="https://cards.scryfall.io/normal/front/<%= card.scryfall_id[0] %>/<%= card.scryfall_id[1] %>/<%= card.scryfall_id %>.jpg"
+        alt="<%= card.name %>"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <div class="mt-2 text-center text-sm w-full">
+      <p class="font-semibold truncate"><%= card.name %></p>
+      <p class="text-gray-500 dark:text-gray-400 text-xs truncate">
+        <%= card.mtg_set.code %>
+        • #<%= card.collector_number %>
+      </p>
+      <p>
+        In collection:
+        <%= collection.quantity %>
+        pcs
+      </p>
+    </div>
+  </div>
+<% end %>

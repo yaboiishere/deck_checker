@@ -46,7 +46,7 @@ class CreateCards < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    add_index :cards, [ :name, :mtg_set_id, :collector_number, :language_id ], unique: true
+    add_index :cards, [ :name,  :mtg_set_id, :collector_number, :language_id, :condition, :foil, :altered, :misprint ], unique: true
   end
 
   def down

@@ -23,11 +23,10 @@ RSpec.describe CardsController, type: :request do
       expect(response).to be_successful
     end
 
-    it "return login page response when user is not authenticated" do
+    it "return page response when user is not authenticated" do
       delete session_path(user.id)
       get cards_path
-      expect(response).to have_http_status(:found)
-      expect(response).to redirect_to(new_session_path)
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -52,8 +51,7 @@ RSpec.describe CardsController, type: :request do
     it "retur login page response when user is not authenticated" do
       delete session_path(user.id)
       get card_path(card.id)
-      expect(response).to have_http_status(:found)
-      expect(response).to redirect_to(new_session_path)
+      expect(response).to have_http_status(200)
     end
   end
 

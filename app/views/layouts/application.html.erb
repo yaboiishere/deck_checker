@@ -50,17 +50,49 @@
             Toggle Dark Mode
           </button>
           <!-- Auth Buttons -->
-          <% if Current.user %>
+          <% if authenticated? %>
             <%= button_to "Logout",
             session_path,
             method: :delete,
             class:
               "text-sm font-medium px-3 py-1 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900 transition" %>
+            <!-- All Cards Button --> <!-- My Collection Button -->
+            <% if current_page?(collections_path) %>
+              <span
+                class="
+                  text-sm px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-gray-600
+                  dark:text-gray-300 cursor-not-allowed
+                "
+              >
+                My Collection
+              </span>
+            <% else %>
+              <%= link_to "My Collection",
+              collections_path,
+              class:
+                "text-sm px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 transition shadow cursor-pointer" %>
+            <% end %>
+
           <% else %>
             <%= link_to "Login",
             new_session_path,
             class:
               "text-sm font-medium px-3 py-1 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900 transition" %>
+          <% end %>
+          <% if current_page?(root_path) %>
+            <span
+              class="
+                text-sm px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-gray-600
+                dark:text-gray-300 cursor-not-allowed
+              "
+            >
+              All Cards
+            </span>
+          <% else %>
+            <%= link_to "All Cards",
+            root_path,
+            class:
+              "text-sm px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 transition shadow cursor-pointer" %>
           <% end %>
         </div>
       </div>

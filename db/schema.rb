@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_22_195610) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_23_200258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,7 +51,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_195610) do
     t.string "collector_number", null: false
     t.boolean "foil", null: false
     t.string "rarity", null: false
-    t.integer "quantity", null: false
     t.string "scryfall_id"
     t.boolean "misprint", default: false, null: false
     t.boolean "altered", default: false, null: false
@@ -65,7 +64,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_195610) do
     t.index ["currency_id"], name: "index_cards_on_currency_id"
     t.index ["language_id"], name: "index_cards_on_language_id"
     t.index ["mtg_set_id"], name: "index_cards_on_mtg_set_id"
-    t.index ["name", "mtg_set_id", "collector_number", "language_id"], name: "idx_on_name_mtg_set_id_collector_number_language_id_8d469a23a6", unique: true
+    t.index ["name", "mtg_set_id", "collector_number", "language_id", "condition", "foil", "altered", "misprint"], name: "idx_on_name_mtg_set_id_collector_number_language_id_1c04b2ac92", unique: true
+  end
+
+  create_table "collections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "card_id", null: false
+    t.integer "quantity", null: false
+    t.index ["card_id"], name: "index_collections_on_card_id"
+    t.index ["user_id", "card_id"], name: "index_collections_on_user_id_and_card_id", unique: true
+    t.index ["user_id"], name: "index_collections_on_user_id"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -75,6 +83,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_195610) do
     t.index ["code"], name: "index_currencies_on_code", unique: true
     t.index ["name"], name: "index_currencies_on_name", unique: true
     t.index ["symbol"], name: "index_currencies_on_symbol", unique: true
+  end
+
+  create_table "import_errors", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "file_name", null: false
+    t.text "error_message", null: false
+    t.index ["user_id"], name: "index_import_errors_on_user_id"
   end
 
   create_table "languages", force: :cascade do |t|
@@ -109,5 +124,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_195610) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "collections", "cards"
+  add_foreign_key "collections", "users"
+  add_foreign_key "import_errors", "users"
   add_foreign_key "sessions", "users"
 end

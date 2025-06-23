@@ -3,66 +3,68 @@ module Parsers::ManaboxCsv
 
   # Binder Name,Binder Type,Name,Set code,Set name,Collector number,Foil,Rarity,Quantity,
   # ManaBox ID,Scryfall ID,Purchase price,Misprint,Altered,Condition,Language,Purchase price currency
-  def self.csv_to_cards(path)
-    csv_path = Rails.root.join(path)
-
+  def self.csv_to_cards(user_id, file_path)
+    languages = Language.all.index_by(&:code)
+    currencies = Currency.all.index_by(&:code)
+    mtg_sets = MtgSet.all.index_by(&:name)
+    begin
     ActiveRecord::Base.transaction do
-      CSV.foreach(csv_path, headers: true) do |row|
-        set = find_set(row["Set code"], row["Set name"])
-        if set.nil? then
-          error_message = "Set not found for code: #{row['Set code']} or name: #{row['Set name']}"
-          raise ActiveRecord::RecordNotFound, error_message
-        end
+        CSV.foreach(file_path, headers: true) do |row|
+          set_name =  row["Set name"]
+          set = mtg_sets[set_name]
 
-        language = Language.find_by(code: row["Language"])
-        currency = Currency.find_by(code: row["Purchase price currency"])
+          language = languages[row["Language"]]
+          currency = currencies[row["Purchase price currency"]]
 
-      card = Card.new(
-          name: row["Name"],
-          collector_number: row["Collector number"],
-          foil: row["Foil"] == "Yes",
-          rarity: row["Rarity"],
-          quantity: row["Quantity"].to_i,
-          scryfall_id: row["Scryfall ID"],
-          misprint: row["Misprint"] == "Yes",
-          altered: row["Altered"] == "Yes",
-          price: row["Purchase price"].to_f,
-          condition: row["Condition"],
-          language_id: language.id,
-          currency_id: currency.id,
-          mtg_set_id: set.id
-      )
-      begin
-          card.save!
-      rescue ActiveRecord::RecordInvalid => e
+          attrs = {
+            name: row["Name"],
+            collector_number: row["Collector number"],
+            foil: row["Foil"] == "foil",
+            rarity: row["Rarity"],
+            scryfall_id: row["Scryfall ID"],
+            misprint: row["Misprint"] == "true",
+            altered: row["Altered"] == "true",
+            condition: row["Condition"],
+            language: language,
+            mtg_set: set
 
-          if e.message =~ Regexp.new(Card::CONSTRAINT_ERROR) then
-            old_record =
-              Card
-              .find_by(
-                name: card.name,
-                mtg_set_id: card.mtg_set_id,
-                collector_number: card.collector_number,
-                language_id: card.language_id,
-                condition: card.condition,
-                foil: card.foil,
-                altered: card.altered,
-                misprint: card.misprint)
-              .lock!
+          }
 
-            old_record.quantity += card.quantity
+          card = Card.find_by(attrs)
 
-            old_record.save!
+          card =
+            if card.nil?
+              c = Card.new(attrs).tap do |c|
+                c.currency = currency
+                c.price = row["Purchase price"].to_f
+              end
+
+              if c.save
+                c
+              else
+                ImportError.create!(user_id: user_id, file_name: file_path, error_message: c.errors.full_messages.join(", "))
+                next
+              end
+            else
+              card
+            end
+
+          collection = Collection.find_by(user_id: user_id, card_id: card.id)
+          quantity = row["Quantity"].to_i
+
+          if collection.nil?
+            Collection.create!(user_id: user_id, card_id: card.id, quantity: quantity)
           else
-          raise e
+            collection
+              .lock!
+              .update!(quantity: collection.quantity + quantity)
           end
+        end
       end
-    end
-  end
-  end
+      :success
 
-  private
-  def self.find_set(code, name)
-    MtgSet.find_by(code: code) || MtgSet.find_by(name: name)
+    rescue => err
+      err.message
+    end
   end
 end

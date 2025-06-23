@@ -1,4 +1,5 @@
 class CardsController < ApplicationController
+  allow_unauthenticated_access only: %i[ index show ]
   before_action :set_card, only: %i[ show edit update destroy ]
 
   # GET /cards or /cards.json

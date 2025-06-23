@@ -1,0 +1,63 @@
+<p class="text-green-600 dark:text-green-400"><%= notice %></p>
+<% content_for :title, "Cards" %>
+
+<div data-controller="import-modal">
+
+  <h1
+    class="
+      mx-auto text-3xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200
+    "
+  >
+    My Cards
+  </h1>
+  <!-- Buttons -->
+  <div class="flex justify-center gap-4 mb-8">
+    <!-- Import Modal Trigger -->
+    <button
+      data-action="click->import-modal#open"
+      class="
+        bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded shadow
+        transition cursor-pointer
+      "
+    >
+      📥 Import Collection
+    </button>
+    <!-- Delete All -->
+    <%= button_to collections_path, method: :delete,
+      data: { turbo_confirm: "Are you sure you want to delete your entire collection?" },
+      class: "bg-red-600 hover:bg-red-500 text-white font-medium px-4 py-2 rounded shadow transition cursor-pointer" do %>
+      🗑 Delete Collection
+    <% end %>
+  </div>
+  <!-- Search Form -->
+  <%= form_with url: collections_path, method: :get, local: true, class: "mb-6 text-center" do %>
+    <input
+      type="text"
+      name="q"
+      placeholder="Search cards..."
+      value="<%= params[:q] %>"
+      class="
+        w-full max-w-md border border-gray-300 dark:border-gray-600 bg-white
+        dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500
+        dark:placeholder-gray-400 rounded px-4 py-2 shadow-sm focus:outline-none
+        focus:ring-2 focus:ring-blue-500 transition-colors duration-200
+      "
+    />
+  <% end %>
+  <!-- Pagination -->
+  <div class="mt-6 pagination-wrapper text-center">
+    <%= will_paginate @collections, class: "flickr_pagination" %>
+  </div>
+  <!-- Cards Grid -->
+  <div
+    class="
+      grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6
+      gap-4
+    "
+    data-controller="select-card"
+  >
+    <%= render partial: "collection", collection: @collections %>
+  </div>
+  <!-- Import Modal Partial -->
+  <%= render partial: "import_modal" %>
+</div>

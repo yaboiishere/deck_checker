@@ -6,7 +6,6 @@ FactoryBot.define do
     altered { false }
     misprint { false }
     condition { "near_mint" }
-    quantity { 1 }
     scryfall_id { SecureRandom.hex(8) }
     price { 0.99 }
     rarity { "common" }
