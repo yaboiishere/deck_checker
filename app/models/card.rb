@@ -1,5 +1,5 @@
 class Card < ApplicationRecord
-  self.per_page = 96
+  self.per_page = 40
 
   validates :name, presence: true
   validates :collector_number, presence: true
@@ -7,7 +7,6 @@ class Card < ApplicationRecord
   validates :altered, inclusion: { in: [ true, false ] }
   validates :misprint, inclusion: { in: [ true, false ] }
   validates :condition, presence: true, inclusion: { in: %w[near_mint lightly_played moderately_played heavily_played damaged] }
-  # validates :quantity, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :scryfall_id, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validates :rarity, presence: true, inclusion: { in: %w[common uncommon rare mythic] }

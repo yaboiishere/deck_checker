@@ -19,19 +19,7 @@ class ImportCollectionJob < ApplicationJob
       end
     end
 
-    user = User.find(user_id)
 
-    Turbo::StreamsChannel.broadcast_replace_to(:collections, target: "collections-list", partial: "collections/collection", collection: user.collections.reload)
-
-    # ActionCable.server.broadcast(
-    #   "collections_#{user_id}",
-    #   Turbo::StreamsChannel.render_action(
-    #     :replace,
-    #     target: "collections-list",
-    #     partial: "collections/collection",
-    #     collection: user.collections.reload
-    #   )
-    # )
   ensure
     File.delete(upload_path) if File.exist?(upload_path)
   end

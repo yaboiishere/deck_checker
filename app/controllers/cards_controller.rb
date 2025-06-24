@@ -1,15 +1,10 @@
 class CardsController < ApplicationController
-  allow_unauthenticated_access only: %i[ index show ]
+  allow_unauthenticated_access only: %i[ index show load_more]
   before_action :set_card, only: %i[ show edit update destroy ]
 
   # GET /cards or /cards.json
   def index
-    @cards = Card.includes([ :language, :currency, :mtg_set ]).order(:name)
-    if params[:q].present?
-      @cards = @cards.where("name ILIKE ?", "%#{params[:q]}%")
-    end
-
-    @cards = @cards.page(params[:page])
+    @cards = cards_query(params)
   end
 
   # GET /cards/1 or /cards/1.json
@@ -64,6 +59,13 @@ class CardsController < ApplicationController
     end
   end
 
+  def load_more
+    offset = params[:offset].to_i
+    @cards = cards_query(params).offset(offset)
+
+    render partial: "cards/card", collection: @cards, formats: :html
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_card
@@ -73,5 +75,16 @@ class CardsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def card_params
       params.expect(card: [ :name, :mtg_set_id, :coolector_number, :foil, :rarity, :quantity, :scryfall_id, :price, :misprint, :altered, :condition, :language_id, :currency_id ])
+    end
+
+    def cards_query(params)
+      cards = Card
+        .includes([ :language, :currency, :mtg_set ])
+        .order(updated_at: :desc)
+        .limit(Card.per_page)
+      if params[:q].present?
+        cards = cards.where("name ILIKE ?", "%#{params[:q]}%")
+      end
+      cards
     end
 end

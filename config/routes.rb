@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
-  resources :cards
+  resources :cards do
+    collection do
+      get :load_more
+    end
+  end
   resources :collections, only: %i[ index show create destroy ] do
     collection do
       post :import
       delete :destroy
+      get :load_more
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
